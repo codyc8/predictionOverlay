@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import tensorflow as tf
+import os
 
 def overlay_predictions(frames, ball_positions):
     '''
@@ -15,6 +16,11 @@ def overlay_predictions(frames, ball_positions):
     # Open the input video
     cap = cv2.VideoCapture(frames)
     
+    # Check if video opened successfully
+    if not cap.isOpened():
+        print("Error: Could not open video.")
+        return None
+    
     # Get video properties
     fps = int(cap.get(cv2.CAP_PROP_FPS))
     width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -22,7 +28,7 @@ def overlay_predictions(frames, ball_positions):
     
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    output_video_path = 'output_video_with_tracking.mp4'
+    output_video_path = os.path.join(os.getcwd(), 'output_video_with_tracking.mp4')
     out = cv2.VideoWriter(output_video_path, fourcc, fps, (width, height))
     
     # Convert ball_positions tensor to numpy array for easier indexing
@@ -51,10 +57,10 @@ def overlay_predictions(frames, ball_positions):
     out.release()
     cv2.destroyAllWindows()
     
+    print(f"Output video saved at: {output_video_path}")
     return output_video_path
 
-
-
+# Example usage
 frames = 'input_video.mp4'
 ball_positions = tf.constant([
     [0, 100, 200],
