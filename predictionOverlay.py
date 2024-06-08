@@ -52,3 +52,15 @@ def overlay_predictions(frames, ball_positions):
     cv2.destroyAllWindows()
     
     return output_video_path
+
+
+
+frames = 'input_video.mp4'
+ball_positions = tf.constant([
+    [0, 100, 200],
+    [5, 150, 250],
+    [10, 200, 300]
+], dtype=tf.float32)
+
+output_path = overlay_predictions(frames, ball_positions)
+print(f"Output video saved at: {output_path}")
